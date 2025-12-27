@@ -100,10 +100,10 @@ class User extends Authenticatable
     /**
      * Get the orders created by the user.
      */
-    // public function orders()
-    // {
-    //     return $this->hasMany(Order::class, 'created_by');
-    // }
+    public function orders()
+    {
+        return $this->hasMany(\App\Models\Order::class, 'created_by');
+    }
 
     /**
      * Get the notifications for the user.
@@ -116,10 +116,10 @@ class User extends Authenticatable
     /**
      * Get the activity logs for the user.
      */
-    // public function activityLogs()
-    // {
-    //     return $this->hasMany(ActivityLog::class);
-    // }   
+    public function activityLogs()
+    {
+        return $this->hasMany(\App\Models\ActivityLog::class);
+    }   
 
     public function unreadNotificationsCount(): int
     {
