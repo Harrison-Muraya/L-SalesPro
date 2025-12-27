@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Inventory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -9,6 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Product extends Model
 {
     use HasFactory, SoftDeletes;
+    
     protected $table = 'products';
     protected $fillable = [
         'category_id',
@@ -44,7 +46,7 @@ class Product extends Model
      */
     public function inventory()
     {
-        return $this->hasMany(\App\Models\Inventory::class);
+        return $this->hasMany(Inventory::class);
     }
 
     /**
