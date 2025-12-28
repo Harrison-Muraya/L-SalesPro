@@ -2,15 +2,18 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreOrderRequest;
+use App\Http\Requests\UpdateOrderStatusRequest;
+use App\Http\Resources\OrderResource;
 use App\Models\Order;
+use App\Services\LeysOrderService;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
-use App\Services\LeysOrderService;
-use App\Http\Controllers\Controller;
 
 class OrderController extends Controller
 {
-     public function __construct(
+    public function __construct(
         private LeysOrderService $orderService
     ) {}
 
@@ -46,12 +49,28 @@ class OrderController extends Controller
         $sortOrder = $request->get('sort_order', 'desc');
         $query->orderBy($sortBy, $sortOrder);
 
-        $orders = $query->paginate($request->get('per_page', 15));
+        // Pagination
+        $perPage = $request->get('per_page', 15);
+        $orders = $query->paginate($perPage);
 
         return response()->json([
             'success' => true,
             'message' => 'Orders retrieved successfully',
-            'data' => new OrderCollection($orders)
+            'data' => OrderResource::collection($orders),
+            'meta' => [
+                'current_page' => $orders->currentPage(),
+                'from' => $orders->firstItem(),
+                'last_page' => $orders->lastPage(),
+                'per_page' => $orders->perPage(),
+                'to' => $orders->lastItem(),
+                'total' => $orders->total(),
+            ],
+            'links' => [
+                'first' => $orders->url(1),
+                'last' => $orders->url($orders->lastPage()),
+                'prev' => $orders->previousPageUrl(),
+                'next' => $orders->nextPageUrl(),
+            ]
         ]);
     }
 
@@ -94,7 +113,12 @@ class OrderController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Order created successfully',
-                'data' => new OrderResource($order)
+                'data' => new OrderResource($order->load([
+                    'customer',
+                    'createdBy',
+                    'items.product',
+                    'items.warehouse'
+                ]))
             ], 201);
         } catch (\Exception $e) {
             return response()->json([
@@ -180,12 +204,29 @@ class OrderController extends Controller
             'items.warehouse'
         ])->findOrFail($id);
 
-        $invoice = $this->orderService->generateInvoice($order);
+        // Check authorization
+        if (!auth()->user()->isManager() && $order->created_by !== auth()->id()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'You do not have permission to view this invoice',
+                'errors' => ['authorization' => ['Insufficient permissions']]
+            ], 403);
+        }
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Invoice generated successfully',
-            'data' => $invoice
-        ]);
+        try {
+            $invoice = $this->orderService->generateInvoice($order);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Invoice generated successfully',
+                'data' => $invoice
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to generate invoice',
+                'errors' => ['invoice' => [$e->getMessage()]]
+            ], 422);
+        }
     }
 }
