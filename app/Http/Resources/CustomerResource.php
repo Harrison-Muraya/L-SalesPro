@@ -15,8 +15,10 @@ class CustomerResource extends JsonResource
     public function toArray(Request $request): array
     {
         $availableCredit = LeyscoHelpers::calculateAvailableCredit(
-            $this->credit_limit,
-            $this->current_balance
+            // $this->credit_limit,
+            // $this->current_balance
+                $creditLimit = (float) ($this->credit_limit ?? 0),
+                $currentBalance = (float) ($this->current_balance ?? 0)
         );
 
         return [
@@ -30,9 +32,9 @@ class CustomerResource extends JsonResource
             'tax_id' => $this->tax_id,
             'payment_terms' => $this->payment_terms,
             'payment_terms_label' => $this->payment_terms . ' days',
-            'credit_limit' => $this->credit_limit,
+            'credit_limit' => $creditLimit,
             'credit_limit_formatted' => LeyscoHelpers::formatCurrency($this->credit_limit),
-            'current_balance' => $this->current_balance,
+            'current_balance' => $currentBalance,
             'current_balance_formatted' => LeyscoHelpers::formatCurrency($this->current_balance),
             'available_credit' => $availableCredit,
             'available_credit_formatted' => LeyscoHelpers::formatCurrency($availableCredit),

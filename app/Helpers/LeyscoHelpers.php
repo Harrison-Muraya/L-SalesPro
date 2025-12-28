@@ -13,11 +13,19 @@ class LeyscoHelpers
      * @param float $amount
      * @return string
      */
-    public static function formatCurrency(float $amount): string
+    // public static function formatCurrency(float $amount): string
+    // {
+    //     $symbol = config('leys_config.currency_symbol', 'KES');
+    //     $formatted = number_format($amount, 2, '.', ',');
+        
+    //     return "{$symbol} {$formatted} /=";
+    // }
+
+    public static function formatCurrency(?float $amount): string
     {
         $symbol = config('leys_config.currency_symbol', 'KES');
+        $amount = $amount ?? 0.0; // default to 0 if null
         $formatted = number_format($amount, 2, '.', ',');
-        
         return "{$symbol} {$formatted} /=";
     }
 
