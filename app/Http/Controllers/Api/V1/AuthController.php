@@ -5,11 +5,12 @@ namespace App\Http\Controllers\Api\V1;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use App\Http\Requests\LoginRequest;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
-use App\Http\Requests\LoginRequest;
-use App\Http\Resources\UserResource;
 
 
 class AuthController extends Controller
@@ -22,6 +23,7 @@ class AuthController extends Controller
      */
     public function login(LoginRequest $request): JsonResponse
     {
+        // Log::info('Login attempt', ['email' => $request->email]);
         $user = User::where('email', $request->email)->first();
 
         if (!$user || !Hash::check($request->password, $user->password)) {
@@ -107,6 +109,7 @@ class AuthController extends Controller
      */
     public function user(Request $request): JsonResponse
     {
+        Log::info('Fetching authenticated user', ['user_id' => $request->user()->id]);
         return response()->json([
             'success' => true,
             'message' => 'User retrieved successfully',

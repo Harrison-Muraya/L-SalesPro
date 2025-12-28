@@ -9,7 +9,15 @@ use App\Http\Controllers\Api\V1\WarehouseController;
 use App\Http\Controllers\Api\V1\DashboardController;
 use App\Http\Controllers\Api\V1\NotificationController;
 
-
+// Health check endpoint
+Route::get('/health', function () {
+    return response()->json([
+        'success' => true,
+        'message' => 'API is running',
+        'timestamp' => now()->toIso8601String(),
+        'version' => 'v1'
+    ]);
+});
 // API Version 1
 Route::prefix('v1')->group(function () {
     
@@ -104,12 +112,3 @@ Route::prefix('v1')->group(function () {
     });
 });
 
-// Health check endpoint
-Route::get('/health', function () {
-    return response()->json([
-        'success' => true,
-        'message' => 'API is running',
-        'timestamp' => now()->toIso8601String(),
-        'version' => 'v1'
-    ]);
-});

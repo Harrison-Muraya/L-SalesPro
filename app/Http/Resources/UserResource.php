@@ -28,7 +28,13 @@ class UserResource extends JsonResource
             'is_manager' => $this->isManager(),
             'unread_notifications_count' => $this->when(
                 $request->user() && $request->user()->id === $this->id,
-                fn() => $this->unreadNotificationsCount()
+                function() {
+                    try {
+                        return $this->unreadNotificationsCount();
+                    } catch (\Exception $e) {
+                        return 0;
+                    }
+                }
             ),
             'email_verified_at' => $this->email_verified_at?->toIso8601String(),
             'created_at' => $this->created_at->toIso8601String(),
