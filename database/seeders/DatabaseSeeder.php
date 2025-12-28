@@ -2,12 +2,14 @@
 
 namespace Database\Seeders;
 
+use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Customer;
 use App\Models\Inventory;
 use App\Models\Warehouse;
+use Illuminate\Support\Str;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -39,6 +41,9 @@ class DatabaseSeeder extends Seeder
         
         // Seed Inventory
         $this->seedInventory();
+
+        // Seed Orders
+        $this->seedOrders();
         
         $this->command->info('Database seeding completed successfully!');
         
@@ -294,5 +299,64 @@ class DatabaseSeeder extends Seeder
         }
 
         $this->command->info('Inventory records seeded: ' . $count);
+    }
+
+    private function seedOrders(): void
+    {
+        $this->command->info('Seeding orders...');
+        
+        $orders = [
+                        [
+                'order_number' => 'ORD-' . strtoupper(Str::random(8)),
+                'customer_id' => 1,
+                'created_by' => 1,
+                'status' => 'pending',
+                'subtotal' => 12000.00,
+                'discount_amount' => 0,
+                'tax_amount' => 1920.00,
+                'total_amount' => 13920.00,
+                'notes' => 'First sample order, waiting for confirmation',
+                'created_at' => Carbon::now()->subDays(5),
+                'updated_at' => Carbon::now()->subDays(5),
+            ],
+            [
+                'order_number' => 'ORD-' . strtoupper(Str::random(8)),
+                'customer_id' => 2,
+                'created_by' => 1,
+                'status' => 'confirmed',
+                'subtotal' => 8500.00,
+                'discount_amount' => 500.00,
+                'discount_type' => 'fixed',
+                'discount_value' => 500.00,
+                'tax_amount' => 1280.00,
+                'total_amount' => 9280.00,
+                'notes' => 'Confirmed order with a fixed discount',
+                'confirmed_at' => Carbon::now()->subDays(3),
+                'created_at' => Carbon::now()->subDays(4),
+                'updated_at' => Carbon::now()->subDays(3),
+            ],
+            [
+                'order_number' => 'ORD-' . strtoupper(Str::random(8)),
+                'customer_id' => 3,
+                'created_by' => 2,
+                'status' => 'delivered',
+                'subtotal' => 15000.00,
+                'discount_amount' => 1500.00,
+                'discount_type' => 'percentage',
+                'discount_value' => 10.00,
+                'tax_amount' => 2160.00,
+                'total_amount' => 15660.00,
+                'notes' => 'Delivered successfully with 10% discount applied',
+                'confirmed_at' => Carbon::now()->subDays(7),
+                'shipped_at' => Carbon::now()->subDays(5),
+                'delivered_at' => Carbon::now()->subDays(2),
+                'created_at' => Carbon::now()->subDays(8),
+                'updated_at' => Carbon::now()->subDays(2),
+            ],
+        ];
+
+        foreach ($orders as $orderData) {
+            \App\Models\Order::create($orderData);
+        }
     }
 }
