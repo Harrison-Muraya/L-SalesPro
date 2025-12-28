@@ -40,75 +40,75 @@ Route::prefix('v1')->group(function () {
         });
 
         // Dashboard Analytics
-        // Route::prefix('dashboard')->group(function () {
-        //     Route::get('/summary', [DashboardController::class, 'summary']);
-        //     Route::get('/sales-performance', [DashboardController::class, 'salesPerformance']);
-        //     Route::get('/inventory-status', [DashboardController::class, 'inventoryStatus']);
-        //     Route::get('/top-products', [DashboardController::class, 'topProducts']);
-        // });
+        Route::prefix('dashboard')->group(function () {
+            Route::get('/summary', [DashboardController::class, 'summary']);
+            Route::get('/sales-performance', [DashboardController::class, 'salesPerformance']);
+            Route::get('/inventory-status', [DashboardController::class, 'inventoryStatus']);
+            Route::get('/top-products', [DashboardController::class, 'topProducts']);
+        });
 
         // Products / Inventory Management
-        // Route::prefix('products')->group(function () {
-        //     Route::get('/', [ProductController::class, 'index']);
-        //     Route::get('/low-stock', [ProductController::class, 'lowStock']);
-        //     Route::get('/{id}', [ProductController::class, 'show']);
-        //     Route::get('/{id}/stock', [ProductController::class, 'stock']);
+        Route::prefix('products')->group(function () {
+            Route::get('/', [ProductController::class, 'index']);
+            Route::get('/low-stock', [ProductController::class, 'lowStock']);
+            Route::get('/{id}', [ProductController::class, 'show']);
+            Route::get('/{id}/stock', [ProductController::class, 'stock']);
             
         //     // Admin only routes
-        //     Route::middleware('can:manage_inventory')->group(function () {
-        //         Route::post('/', [ProductController::class, 'store']);
-        //         Route::put('/{id}', [ProductController::class, 'update']);
-        //         Route::delete('/{id}', [ProductController::class, 'destroy']);
-        //     });
+            Route::middleware('can:manage_inventory')->group(function () {
+                Route::post('/', [ProductController::class, 'store']);
+                Route::put('/{id}', [ProductController::class, 'update']);
+                Route::delete('/{id}', [ProductController::class, 'destroy']);
+            });
             
         //     // Stock operations
-        //     Route::post('/{id}/reserve', [ProductController::class, 'reserveStock']);
-        //     Route::post('/{id}/release', [ProductController::class, 'releaseStock']);
-        // });
+            Route::post('/{id}/reserve', [ProductController::class, 'reserveStock']);
+            Route::post('/{id}/release', [ProductController::class, 'releaseStock']);
+        });
 
         // Customers
-        // Route::prefix('customers')->group(function () {
-        //     Route::get('/', [CustomerController::class, 'index']);
-        //     Route::get('/map-data', [CustomerController::class, 'mapData']);
-        //     Route::get('/{id}', [CustomerController::class, 'show']);
-        //     Route::get('/{id}/orders', [CustomerController::class, 'orders']);
-        //     Route::get('/{id}/credit-status', [CustomerController::class, 'creditStatus']);
-        //     Route::post('/', [CustomerController::class, 'store']);
-        //     Route::put('/{id}', [CustomerController::class, 'update']);
-        //     Route::delete('/{id}', [CustomerController::class, 'destroy']);
-        // });
+        Route::prefix('customers')->group(function () {
+            Route::get('/', [CustomerController::class, 'index']);
+            Route::get('/map-data', [CustomerController::class, 'mapData']);
+            Route::get('/{id}', [CustomerController::class, 'show']);
+            Route::get('/{id}/orders', [CustomerController::class, 'orders']);
+            Route::get('/{id}/credit-status', [CustomerController::class, 'creditStatus']);
+            Route::post('/', [CustomerController::class, 'store']);
+            Route::put('/{id}', [CustomerController::class, 'update']);
+            Route::delete('/{id}', [CustomerController::class, 'destroy']);
+        });
 
         // Orders
-        // Route::prefix('orders')->group(function () {
-        //     Route::get('/', [OrderController::class, 'index']);
-        //     Route::get('/{id}', [OrderController::class, 'show']);
-        //     Route::get('/{id}/invoice', [OrderController::class, 'invoice']);
-        //     Route::post('/calculate-total', [OrderController::class, 'calculateTotal']);
-        //     Route::post('/', [OrderController::class, 'store'])
-        //         ->middleware('check.credit');
-        //     Route::put('/{id}/status', [OrderController::class, 'updateStatus']);
-        // });
+        Route::prefix('orders')->group(function () {
+            Route::get('/', [OrderController::class, 'index']);
+            Route::get('/{id}', [OrderController::class, 'show']);
+            Route::get('/{id}/invoice', [OrderController::class, 'invoice']);
+            Route::post('/calculate-total', [OrderController::class, 'calculateTotal']);
+            Route::post('/', [OrderController::class, 'store'])
+                ->middleware('check.credit');
+            Route::put('/{id}/status', [OrderController::class, 'updateStatus']);
+        });
 
         // Warehouses
-        // Route::prefix('warehouses')->group(function () {
-        //     Route::get('/', [WarehouseController::class, 'index']);
-        //     Route::get('/{id}/inventory', [WarehouseController::class, 'inventory']);
-        // });
+        Route::prefix('warehouses')->group(function () {
+            Route::get('/', [WarehouseController::class, 'index']);
+            Route::get('/{id}/inventory', [WarehouseController::class, 'inventory']);
+        });
 
         // Stock Transfers
-        // Route::prefix('stock-transfers')->group(function () {
-        //     Route::get('/', [WarehouseController::class, 'transferHistory']);
-        //     Route::post('/', [WarehouseController::class, 'transfer']);
-        // });
+        Route::prefix('stock-transfers')->group(function () {
+            Route::get('/', [WarehouseController::class, 'transferHistory']);
+            Route::post('/', [WarehouseController::class, 'transfer']);
+        });
 
         // Notifications
-        // Route::prefix('notifications')->group(function () {
-        //     Route::get('/', [NotificationController::class, 'index']);
-        //     Route::get('/unread-count', [NotificationController::class, 'unreadCount']);
-        //     Route::put('/read-all', [NotificationController::class, 'markAllAsRead']);
-        //     Route::put('/{id}/read', [NotificationController::class, 'markAsRead']);
-        //     Route::delete('/{id}', [NotificationController::class, 'destroy']);
-        // });
+        Route::prefix('notifications')->group(function () {
+            Route::get('/', [NotificationController::class, 'index']);
+            Route::get('/unread-count', [NotificationController::class, 'unreadCount']);
+            Route::put('/read-all', [NotificationController::class, 'markAllAsRead']);
+            Route::put('/{id}/read', [NotificationController::class, 'markAsRead']);
+            Route::delete('/{id}', [NotificationController::class, 'destroy']);
+        });
     });
 });
 
