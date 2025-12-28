@@ -13,7 +13,31 @@ return new class extends Migration
     {
         Schema::create('customers', function (Blueprint $table) {
             $table->id();
+            $table->string('name', 255);
+            $table->enum('type', ['Garage', 'Dealership', 'Distributor', 'Retailer']);
+            $table->enum('category', ['A', 'A+', 'B', 'C'])->default('C');
+            $table->string('contact_person', 255);
+            $table->string('phone', 20);
+            $table->string('email')->unique();
+            $table->string('tax_id', 50)->unique();
+            $table->integer('payment_terms')->default(30)->comment('Payment terms in days');
+            $table->decimal('credit_limit', 12, 2)->default(0);
+            $table->decimal('current_balance', 12, 2)->default(0);
+            $table->decimal('latitude', 10, 8)->nullable();
+            $table->decimal('longitude', 11, 8)->nullable();
+            $table->text('address');
+            $table->string('territory', 100)->nullable();
             $table->timestamps();
+            $table->softDeletes();
+
+             // Indexes
+            $table->index('email');
+            $table->index('tax_id');
+            $table->index('category');
+            $table->index('type');
+            $table->index('name');
+            $table->index(['latitude', 'longitude']);
+            $table->index('created_at');
         });
     }
 
