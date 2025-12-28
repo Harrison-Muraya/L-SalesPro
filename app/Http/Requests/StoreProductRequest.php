@@ -5,13 +5,16 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Support\Facades\Log;
 
 
 // Store Product Request
 class StoreProductRequest extends FormRequest
 {
+   
     public function authorize(): bool
     {
+        Log::info('current user ', ['user' => $this->user()]);
         return $this->user()->hasPermission('manage_inventory');
     }
 

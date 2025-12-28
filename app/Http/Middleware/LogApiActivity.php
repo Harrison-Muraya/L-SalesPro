@@ -48,8 +48,10 @@ class LogApiActivity
         \App\Models\ActivityLog::create([
             'user_id' => Auth::id(),
             'action' => $action,
-            'model_type' => $modelInfor['model_type'],
-            'model_id' => $modelInfor['model_id'],
+            // 'model_type' => $modelInfor['model_type'] ? $modelInfor['type'] : 'N/A',
+            // 'model_id' => $modelInfor['model_id'],
+            'model_type' => 1, // Hardcoded for testing
+            'model_id' => 2, // Hardcoded for testing
             'old_values' => $this->getOldValues($request),
             'new_values' => $this->getNewValues($request, $response),
             'method' => $request->method(),
