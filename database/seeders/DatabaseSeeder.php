@@ -44,6 +44,9 @@ class DatabaseSeeder extends Seeder
 
         // Seed Orders
         $this->seedOrders();
+
+        // Seed Order Items
+        $this->seedOrderItems();
         
         $this->command->info('Database seeding completed successfully!');
         
@@ -359,4 +362,51 @@ class DatabaseSeeder extends Seeder
             \App\Models\Order::create($orderData);
         }
     }
+
+    private function seedOrderItems(): void
+    {
+        $this->command->info('Seeding order items...');
+
+        $orders = \App\Models\Order::all();
+        $products = \App\Models\Product::all();
+        $warehouses = \App\Models\Warehouse::pluck('id')->toArray();
+
+        $count = 0;
+
+        foreach ($orders as $order) {
+            foreach ($products->random(rand(1, 3)) as $product) { // random 1–3 products per order
+                $quantity = rand(1, 10);
+                $unitPrice = $product->price;
+                $discountType = ['percentage', 'fixed'][array_rand(['percentage', 'fixed'])];
+                $discountValue = $discountType === 'percentage' ? rand(5, 15) : rand(100, 500);
+                $discountAmount = $discountType === 'percentage'
+                    ? ($unitPrice * $quantity) * ($discountValue / 100)
+                    : $discountValue;
+                $subtotal = $unitPrice * $quantity;
+                $taxRate = 16.0;
+                $taxAmount = ($subtotal - $discountAmount) * ($taxRate / 100);
+                $total = ($subtotal - $discountAmount) + $taxAmount;
+
+                \App\Models\OrderItem::create([
+                    'order_id' => $order->id,
+                    'product_id' => $product->id,
+                    'warehouse_id' => $warehouses ? $warehouses[array_rand($warehouses)] : 1,
+                    'quantity' => $quantity,
+                    'unit_price' => $unitPrice,
+                    'discount_amount' => $discountAmount,
+                    'discount_type' => $discountType,
+                    'discount_value' => $discountValue,
+                    'subtotal' => $subtotal,
+                    'tax_rate' => $taxRate,
+                    'tax_amount' => $taxAmount,
+                    'total' => $total,
+                ]);
+
+                $count++;
+            }
+        }
+
+        $this->command->info("Order items seeded successfully: {$count}");
+    }
+
 }
