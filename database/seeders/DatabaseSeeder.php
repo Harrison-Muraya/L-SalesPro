@@ -11,6 +11,7 @@ use App\Models\Customer;
 use App\Models\Inventory;
 use App\Models\Warehouse;
 use Illuminate\Support\Str;
+use App\Models\Notification;
 use Illuminate\Database\Seeder;
 use App\Models\StockReservation;
 use Illuminate\Support\Facades\Hash;
@@ -52,6 +53,9 @@ class DatabaseSeeder extends Seeder
 
         // Seed Stock Reservations
         $this->seedStockReservations();
+
+        // Seed Notifications
+        $this->seedNotification();
         
         $this->command->info('Database seeding completed successfully!');
         
@@ -460,5 +464,54 @@ class DatabaseSeeder extends Seeder
         }
 
         $this->command->info("Stock reservations seeded: {$count}");
+    }
+
+    private function seedNotification(): void
+    {
+        $this->command->info('Seeding notifications...');
+
+        $users = User::all();
+
+        if ($users->isEmpty()) {
+            $this->command->warn(' No users found. Please seed users first.');
+            return;
+        }
+
+        $notificationTypes = [
+            'order_confirmation' => 'Your order has been successfully placed.',
+            'low_stock_alert' => 'Low stock alert: Some items in your inventory are running low.',
+            'system_announcement' => 'System maintenance scheduled for this weekend.',
+            'credit_limit_warning' => 'Credit limit warning: You are nearing your credit limit.',
+        ];
+
+        $count = 0;
+
+        foreach ($users as $user) {
+            // Each user gets 3–5 random notifications
+            $numNotifications = rand(3, 5);
+
+            for ($i = 0; $i < $numNotifications; $i++) {
+                $type = array_rand($notificationTypes);
+                $isRead = (bool) rand(0, 1);
+
+                Notification::create([
+                    'user_id' => $user->id,
+                    'type' => $type,
+                    'title' => ucfirst(str_replace('_', ' ', $type)),
+                    'message' => $notificationTypes[$type],
+                    'data' => json_encode([
+                        'related_id' => rand(1, 1000),
+                        'extra_info' => 'This is sample data for ' . $type,
+                    ]),
+                    'is_read' => $isRead,
+                    'read_at' => $isRead ? Carbon::now()->subHours(rand(1, 72)) : null,
+                    'created_at' => Carbon::now()->subDays(rand(0, 5)),
+                ]);
+
+                $count++;
+            }
+        }
+
+        $this->command->info("Notifications seeded: {$count}");
     }
 }
