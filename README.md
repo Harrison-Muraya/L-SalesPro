@@ -10,7 +10,7 @@
 
 ## Required PHP Extensions
 ```bash
-php -m | grep -E 'pdo|mbstring|openssl|tokenizer|xml|ctype|json|bcmath|redis|zip|xsl'
+php -m | grep -E 'pdo_mysql|mbstring|openssl|tokenizer|xml|ctype|json|bcmath|redis|zip|xsl|fileinfo|gd|curl'
 ```
 
 ## Installation
