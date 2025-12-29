@@ -1,18 +1,12 @@
-Requirements
-
+## System Requirements
 PHP 8.2+
-
 Composer 2.x
-
 MySQL 8.0+ or PostgreSQL 13+
-
 Redis 6.0+
 
-Node.js & NPM (for asset compilation, if applicable)
+## Required PHP Extensions
+php -m | grep -E 'pdo|mbstring|openssl|tokenizer|xml|ctype|json|bcmath|redis|'
 
-
-
-## About Laravel
 
 Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
 
