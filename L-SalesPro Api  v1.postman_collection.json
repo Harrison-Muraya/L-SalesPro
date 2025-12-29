@@ -558,13 +558,18 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/api/{{api_version}}/auth/login",
+							"raw": "http://127.0.0.1:8000/api/v1/auth/login",
+							"protocol": "http",
 							"host": [
-								"{{base_url}}"
+								"127",
+								"0",
+								"0",
+								"1"
 							],
+							"port": "8000",
 							"path": [
 								"api",
-								"{{api_version}}",
+								"v1",
 								"auth",
 								"login"
 							]
@@ -2281,7 +2286,22 @@
 			"name": "check api health",
 			"request": {
 				"method": "GET",
-				"header": []
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/health",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"health"
+					]
+				}
 			},
 			"response": []
 		}
