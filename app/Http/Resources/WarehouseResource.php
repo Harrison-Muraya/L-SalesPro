@@ -29,11 +29,33 @@ class WarehouseResource extends JsonResource
             ],
             'inventory_count' => $this->when(
                 $request->routeIs('warehouses.show'),
-                fn() => $this->inventory()->count()
+                function() {
+                    try {
+                        return $this->inventory()->count();
+                    } catch (\Exception $e) {
+                        return 0;
+                    }
+                }
             ),
             'total_stock' => $this->when(
                 $request->routeIs('warehouses.show'),
-                fn() => $this->inventory()->sum('quantity')
+                function() {
+                    try {
+                        return $this->inventory()->sum('quantity');
+                    } catch (\Exception $e) {
+                        return 0;
+                    }
+                }
+            ),
+            'available_stock' => $this->when(
+                $request->routeIs('warehouses.show'),
+                function() {
+                    try {
+                        return $this->inventory()->sum('available_quantity');
+                    } catch (\Exception $e) {
+                        return 0;
+                    }
+                }
             ),
             'created_at' => $this->created_at->toIso8601String(),
             'updated_at' => $this->updated_at->toIso8601String(),

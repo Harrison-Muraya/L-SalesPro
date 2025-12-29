@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Carbon\Carbon;
 use App\Models\User;
+use App\Models\Order;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Customer;
@@ -11,6 +12,7 @@ use App\Models\Inventory;
 use App\Models\Warehouse;
 use Illuminate\Support\Str;
 use Illuminate\Database\Seeder;
+use App\Models\StockReservation;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
@@ -47,6 +49,9 @@ class DatabaseSeeder extends Seeder
 
         // Seed Order Items
         $this->seedOrderItems();
+
+        // Seed Stock Reservations
+        $this->seedStockReservations();
         
         $this->command->info('Database seeding completed successfully!');
         
@@ -409,4 +414,51 @@ class DatabaseSeeder extends Seeder
         $this->command->info("Order items seeded successfully: {$count}");
     }
 
+    private function seedStockReservations(): void
+    {
+        
+        $this->command->info('Seeding stock reservations...');
+
+        // Fetch all related models
+        $products = Product::all();
+        $warehouses = Warehouse::all();
+        $orders = Order::all();
+
+        if ($products->isEmpty() || $warehouses->isEmpty()) {
+            $this->command->warn('Cannot seed stock reservations — no products or warehouses found.');
+            return;
+        }
+
+        $count = 0;
+
+        foreach ($products as $product) {
+            // Random warehouse for this product
+            $warehouse = $warehouses->random();
+            // Random order (some reservations may not be linked to an order)
+            $order = $orders->isNotEmpty() && rand(0, 1) ? $orders->random() : null;
+
+            // Generate multiple reservations per product
+            for ($i = 0; $i < rand(1, 3); $i++) {
+                $status = collect(['pending', 'confirmed', 'released', 'expired'])->random();
+                $quantity = rand(5, 50);
+
+                // Expiry time: random 1–10 days ahead or behind
+                $expiresAt = Carbon::now()->addDays(rand(-5, 10));
+
+                StockReservation::create([
+                    'product_id' => $product->id,
+                    'warehouse_id' => $warehouse->id,
+                    'order_id' => $order?->id,
+                    'reservation_reference' => 'RES-' . strtoupper(Str::random(8)),
+                    'quantity' => $quantity,
+                    'status' => $status,
+                    'expires_at' => $expiresAt,
+                ]);
+
+                $count++;
+            }
+        }
+
+        $this->command->info("Stock reservations seeded: {$count}");
+    }
 }

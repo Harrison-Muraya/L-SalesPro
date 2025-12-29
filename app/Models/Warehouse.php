@@ -34,15 +34,15 @@ class Warehouse extends Model
         return $this->hasMany(Inventory::class);
     }
 
-    // public function transfersFrom()
-    // {
-    //     return $this->hasMany(StockTransfer::class, 'from_warehouse_id');
-    // }
+    public function transfersFrom()
+    {
+        return $this->hasMany(StockTransfer::class, 'from_warehouse_id');
+    }
 
-    // public function transfersTo()
-    // {
-    //     return $this->hasMany(StockTransfer::class, 'to_warehouse_id');
-    // }
+    public function transfersTo()
+    {
+        return $this->hasMany(StockTransfer::class, 'to_warehouse_id');
+    }
 
     public function getTotalStockAttribute(): int
     {
