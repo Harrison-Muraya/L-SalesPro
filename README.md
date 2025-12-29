@@ -1,8 +1,8 @@
 ## System Requirements
-PHP 8.2+
-Composer 2.x
-MySQL 8.0+ or PostgreSQL 13+
-Redis 6.0+
+- PHP 8.2+
+- Composer 2.x
+- MySQL 8.0+ or PostgreSQL 13+
+- Redis 6.0+
 
 ## Required PHP Extensions
 ```bash
