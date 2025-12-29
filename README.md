@@ -10,12 +10,14 @@
 
 ## Required PHP Extensions
 ```bash
-php -m | grep -E 'pdo|mbstring|openssl|tokenizer|xml|ctype|json|bcmath|redis|'
+php -m | grep -E 'pdo|mbstring|openssl|tokenizer|xml|ctype|json|bcmath|redis|zip|xsl'
 ```
 
 ## Installation
 ```bash
 git clone https://github.com/Harrison-Muraya/L-SalesPro.git lsalespro-api
+```
+```
 cd lsalespro-api
 ```
 ## install Dependencies
@@ -25,6 +27,8 @@ composer install
 ## Environment Configuration
 ```bash
 cp .env.example .env
+```
+```
 php artisan key:generate
 ```
 ## Configure Environment Variables
