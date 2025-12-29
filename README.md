@@ -68,7 +68,6 @@ php artisan serve
 The API will be available at:
 (http://localhost:8000)
 
+## Quick Start with Postman
+You can explore all API endpoints instantly using the official Postman collection.
 
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
