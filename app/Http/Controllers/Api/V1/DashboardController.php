@@ -191,19 +191,19 @@ class DashboardController extends Controller
      */
     public function inventoryStatus(): JsonResponse
     {
-        $cacheKey = 'dashboard:inventory:status';
+        $cacheKey = 'dashboard:inventorys:status';
 
         $data = Cache::remember($cacheKey, 600, function () {
             $categories = DB::table('categories')
                 ->join('products', 'categories.id', '=', 'products.category_id')
-                ->join('inventory', 'products.id', '=', 'inventory.product_id')
+                ->join('inventorys', 'products.id', '=', 'inventorys.product_id')
                 ->select(
                     'categories.id',
                     'categories.name',
                     DB::raw('COUNT(DISTINCT products.id) as product_count'),
-                    DB::raw('SUM(inventory.quantity) as total_quantity'),
-                    DB::raw('SUM(inventory.available_quantity) as available_quantity'),
-                    DB::raw('SUM(inventory.reserved_quantity) as reserved_quantity')
+                    DB::raw('SUM(inventorys.quantity) as total_quantity'),
+                    DB::raw('SUM(inventorys.available_quantity) as available_quantity'),
+                    DB::raw('SUM(inventorys.reserved_quantity) as reserved_quantity')
                 )
                 ->groupBy('categories.id', 'categories.name')
                 ->get()
