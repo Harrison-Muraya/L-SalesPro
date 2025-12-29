@@ -1,16 +1,54 @@
 ## System Requirements
 - PHP 8.2+
-- Composer 2.x
+- Composer 2.9
 - MySQL 8.0+ or PostgreSQL 13+
 - Redis 6.0+
+- code editor(VS Code)
+
+#  Development tools
+- postman installed
 
 ## Required PHP Extensions
 ```bash
 php -m | grep -E 'pdo|mbstring|openssl|tokenizer|xml|ctype|json|bcmath|redis|'
 ```
 
+## Installation
+```bash
+git clone https://github.com/Harrison-Muraya/L-SalesPro.git lsalespro-api
+cd lsalespro-api
+```
+## install Dependencies
+```bash
+composer install
+```
+## Environment Configuration
+```bash
+cp .env.example .env
+php artisan key:generate
+```
+## Configure Environment Variables
+```
+APP_NAME="L-SalesPro API"
+APP_ENV=local
+APP_DEBUG=true
+APP_URL=http://localhost:8000
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=lsalespro
+DB_USERNAME=root
+DB_PASSWORD=your_password
+
+REDIS_HOST=127.0.0.1
+REDIS_PORT=6379
+
+CACHE_DRIVER=redis
+QUEUE_CONNECTION=database
+```
+## Database Setup
+
 
 - [Simple, fast routing engine](https://laravel.com/docs/routing).
 - [Powerful dependency injection container](https://laravel.com/docs/container).
