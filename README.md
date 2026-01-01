@@ -76,8 +76,6 @@ Create a new environment named L-SalesPro Local and add these variables
 
 | Variable     | Initial Value           | Current Value           |
 | ------------ | ----------------------- | ----------------------- |
-| base_url     | `http://localhost:8000` | `http://localhost:8000` |
-| api_version  | `v1`                    | `v1`                    |
 | access_token | *(leave blank for now)* | *(leave blank for now)* |
 
 
