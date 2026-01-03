@@ -31,7 +31,7 @@ Route::prefix('v1')->group(function () {
 
     // Protected routes (authentication required)
     Route::middleware(['auth:sanctum', 'log.activity'])->group(function () {
-        
+                                                      
         // Authentication
         Route::prefix('auth')->group(function () {
             Route::post('/logout', [AuthController::class, 'logout']);

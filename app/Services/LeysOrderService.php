@@ -323,11 +323,8 @@ class LeysOrderService
      * @param int $quantity
      * @throws Exception
      */
-    private function validateProductAvailability(
-        Product $product,
-        int $warehouseId,
-        int $quantity
-    ): void {
+    private function validateProductAvailability(Product $product, int $warehouseId, int $quantity): void 
+    {
         if (!$product->isAvailableAtWarehouse($warehouseId, $quantity)) {
             throw new Exception(
                 "Insufficient stock for {$product->name} at the selected warehouse"

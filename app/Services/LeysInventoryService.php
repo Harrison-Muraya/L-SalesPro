@@ -23,12 +23,8 @@ class LeysInventoryService
      * @return StockReservation
      * @throws Exception
      */
-    public function reserveStock(
-        int $productId,
-        int $warehouseId,
-        int $quantity,
-        ?int $orderId = null
-    ): StockReservation {
+    public function reserveStock(int $productId, int $warehouseId, int $quantity,?int $orderId = null ): StockReservation
+     {
         return DB::transaction(function () use ($productId, $warehouseId, $quantity, $orderId) {
             // Get inventory with lock
             $inventory = Inventory::where('product_id', $productId)
@@ -225,12 +221,8 @@ class LeysInventoryService
      * @return bool
      * @throws Exception
      */
-    public function transferStock(
-        int $productId,
-        int $fromWarehouseId,
-        int $toWarehouseId,
-        int $quantity
-    ): bool {
+    public function transferStock(int $productId, int $fromWarehouseId, int $toWarehouseId, int $quantity): bool 
+    {
         return DB::transaction(function () use ($productId, $fromWarehouseId, $toWarehouseId, $quantity) {
             // Lock source inventory
             $fromInventory = Inventory::where('product_id', $productId)

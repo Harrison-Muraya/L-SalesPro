@@ -215,11 +215,8 @@ class LeysNotificationService
     /**
      * Send system announcement
      */
-    public function sendSystemAnnouncement(
-        string $title,
-        string $message,
-        array $data = []
-    ): void {
+    public function sendSystemAnnouncement(string $title, string $message, array $data = []  ): void 
+    {
         $users = User::where('status', 'active')->get();
 
         foreach ($users as $user) {

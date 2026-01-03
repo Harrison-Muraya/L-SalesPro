@@ -18,19 +18,6 @@ class LogApiActivity
     public function handle(Request $request, Closure $next): Response
     {
         $response = $next($request);
-        // Only log for authenticated users
-        // if (Auth()->check()) {
-        //     $user = Auth()->user();
-        //     // Log the activity
-        //     \App\Models\ActivityLog::create([
-        //         'user_id' => $user->id,
-        //         'method' => $request->method(),
-        //         'endpoint' => $request->path(),
-        //         'ip_address' => $request->ip(),
-        //         'user_agent' => $request->header('User-Agent'),
-        //         'status_code' => $response->getStatusCode(),
-        //     ]);
-        // }
 
         if(Auth::check()) {
             $this->logActivity($request, $response);            
@@ -68,8 +55,10 @@ class LogApiActivity
 
     protected function determineAction(Request $request): string
     {
+        // dd($request);
         $method = $request->method();
         $path = $request->path();
+       
 
         // Parse the action from method and path
         $actions = [

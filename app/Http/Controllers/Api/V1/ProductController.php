@@ -76,7 +76,7 @@ class ProductController extends Controller
      */
     public function store(StoreProductRequest $request): JsonResponse
     {
-        Log::info('validated data ', ['data' => $request->validated()]);
+        // Log::info('validated data ', ['data' => $request->validated()]);
         $product = Product::create($request->validated());
 
         return response()->json([
@@ -89,7 +89,7 @@ class ProductController extends Controller
     /**
      * Update the specified product
      */
-    public function update(UpdateProductRequest $request, int $id): JsonResponse
+    public function  update(UpdateProductRequest $request, int $id): JsonResponse
     {
         $product = Product::findOrFail($id);
         $product->update($request->validated());
